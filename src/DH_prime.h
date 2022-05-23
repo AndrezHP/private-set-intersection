@@ -8,6 +8,10 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
+#include<stdlib.h>
+#include <time.h>
+#include <random>
+#include <limits>
 #ifndef UTIL_H
 #include"util.h"
 #define UTIL_H
@@ -50,7 +54,14 @@ void gen_key(mpz_t loc) {
     get_primes(primeq, primep);
 
     gmp_randstate_t state;
-    gmp_randinit_mt(state);
+    gmp_randinit_default(state);
+    
+    std::random_device rd;
+    std::mt19937_64 eng(rd());
+    std::uniform_int_distribution<unsigned long long> distr;
+
+    unsigned long seed = distr(eng);
+    gmp_randseed_ui(state, seed);
 
     mpz_urandomm(loc, state, primeq);
 }
